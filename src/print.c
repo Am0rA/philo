@@ -98,7 +98,7 @@ void	*thread_print(void *input)
 	pthread_mutex_lock(&p->e->m_print);
 	pthread_mutex_unlock(&p->e->m_print);
 	while (print_cond(p))
-		;
+		check_starvation(p);
 	pthread_mutex_lock(&p->m_l);
 	p->end = 1;
 	pthread_mutex_unlock(&p->m_l);

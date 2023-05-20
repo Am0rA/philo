@@ -2,7 +2,7 @@ NAME	= philo
 HEADER	= inc/philo.h
 ####################################
 CC		= gcc
-CFLAGS	= -Wall -Wextra -Werror -pthread -fsanitize=thread -g -Iinc
+CFLAGS	= -Wall -Wextra -Werror -pthread -Iinc
 COMPILE = $(CC) $(CFLAGS)
 RM		= rm -f
 ####################################

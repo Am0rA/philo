@@ -18,7 +18,7 @@ typedef struct s_list
 {
 	long			ms;
 	int				i;
-	char			s[11];
+	char			s[20];
 	struct s_list	*next;
 }	t_list;
 
@@ -48,6 +48,7 @@ typedef struct	s_phi
 	pthread_t		philo;
 	pthread_t		printer;
 	pthread_mutex_t	m_l;
+	pthread_mutex_t	m_eat;
 }	t_phi;
 
 //init_table.c
@@ -57,6 +58,7 @@ int		init_table(t_env *e);
 int		main(int ac, char **av);
 
 //philo.c
+void	check_starvation(t_phi *p);
 void	*thread_philo(void *input);
 
 //print.c
