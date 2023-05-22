@@ -45,10 +45,10 @@ static int	eat(t_phi *p)
 
 	vice = (p->id + 1) % p->e->n_phi;
 	pthread_mutex_lock(&p->e->fork[vice]);
-	if (!add_cond(dinner_time(p->e), p, "has taken left fork"))
+	if (!add_cond(dinner_time(p->e), p, "has taken a fork"))
 		return (unlock_mutexes(p, 1, vice));
 	pthread_mutex_lock(&p->e->fork[p->id]);
-	if (!add_cond(dinner_time(p->e), p, "has taken own fork"))
+	if (!add_cond(dinner_time(p->e), p, "has taken a fork"))
 		return (unlock_mutexes(p, 2, vice));
 	p->t_ate = dinner_time(p->e);
 	if (!add_cond(p->t_ate, p, "is eating"))
@@ -79,7 +79,7 @@ void	*thread_philo(void *input)
 	p->t_ate = dinner_time(p->e);
 	if (p->e->n_phi == 1)
 	{
-		printf("0 Philosopher 1 has taken left fork.\n");
+		printf("0 Philosopher 1 has taken a fork.\n");
 		usleep(p->e->t_die * 1000);
 		return (NULL);
 	}
