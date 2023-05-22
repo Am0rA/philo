@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   start_dinner.c                                     :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: itopchu <itopchu@student.codam.nl>           +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/05/17 18:52:15 by itopchu       #+#    #+#                 */
+/*   Updated: 2023/05/17 18:52:15 by itopchu       ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 static int	start_philo(t_env *e)
@@ -6,13 +18,15 @@ static int	start_philo(t_env *e)
 
 	i = -1;
 	while (++i < e->n_phi)
-		if (pthread_create(&(e->phi[i].philo), NULL,\
+	{
+		if (pthread_create(&(e->phi[i].philo), NULL, \
 			thread_philo, &(e->phi[i])))
 		{
 			e->end = 1;
 			pthread_mutex_unlock(&e->m_print);
 			break ;
 		}
+	}
 	if (i < e->n_phi)
 	{
 		printf("Failed on %d.\n", i);
@@ -22,7 +36,7 @@ static int	start_philo(t_env *e)
 			pthread_join(e->phi[i].printer, NULL);
 		return (1);
 	}
-	return (0);	
+	return (0);
 }
 
 static int	start_printer(t_env *e)
@@ -31,13 +45,15 @@ static int	start_printer(t_env *e)
 
 	i = -1;
 	while (++i < e->n_phi)
-		if (pthread_create(&(e->phi[i].printer), NULL,\
+	{
+		if (pthread_create(&(e->phi[i].printer), NULL, \
 			thread_print, &(e->phi[i])))
 		{
 			e->end = 1;
 			pthread_mutex_unlock(&e->m_print);
 			break ;
 		}
+	}
 	if (i < e->n_phi)
 	{
 		printf("Failed on %d.\n", i);

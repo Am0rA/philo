@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   print.c                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: itopchu <itopchu@student.codam.nl>           +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/05/17 18:52:51 by itopchu       #+#    #+#                 */
+/*   Updated: 2023/05/17 18:52:51 by itopchu       ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 static void	add_to_end(t_list **l, t_list *new)
@@ -98,7 +110,7 @@ void	*thread_print(void *input)
 	pthread_mutex_lock(&p->e->m_print);
 	pthread_mutex_unlock(&p->e->m_print);
 	while (print_cond(p))
-		check_starvation(p);
+		;
 	pthread_mutex_lock(&p->m_l);
 	p->end = 1;
 	pthread_mutex_unlock(&p->m_l);

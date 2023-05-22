@@ -1,14 +1,33 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   philo.c                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: itopchu <itopchu@student.codam.nl>           +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/05/17 18:53:09 by itopchu       #+#    #+#                 */
+/*   Updated: 2023/05/17 18:53:09 by itopchu       ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-void	check_starvation(t_phi *p)
+int	check_starvation(t_phi *p)
 {
+	long	dinner;
+	int		status;
+
 	pthread_mutex_lock(&p->m_eat);
-	if (dinner_time(p->e) - p->t_ate >= p->e->t_die)
+	dinner = dinner_time(p->e);
+	status = 0;
+	if (dinner - p->t_ate >= p->e->t_die)
 	{
-		if (!add_cond(dinner_time(p->e), p, "died"))
-			printf("Failed around time %ld\n", dinner_time(p->e));
+		status = 1;
+		if (!add_cond(dinner, p, "died"))
+			printf ("Malloc problem.\n");
 	}
 	pthread_mutex_unlock(&p->m_eat);
+	return (status);
 }
 
 static int	unlock_mutexes(t_phi *p, int step, int vice)
@@ -31,9 +50,7 @@ static int	eat(t_phi *p)
 	pthread_mutex_lock(&p->e->fork[p->id]);
 	if (!add_cond(dinner_time(p->e), p, "has taken own fork"))
 		return (unlock_mutexes(p, 2, vice));
-	pthread_mutex_lock(&p->m_eat);
 	p->t_ate = dinner_time(p->e);
-	pthread_mutex_unlock(&p->m_eat);
 	if (!add_cond(p->t_ate, p, "is eating"))
 		return (unlock_mutexes(p, 2, vice));
 	ft_better_sleep(p->e->t_eat);
@@ -59,13 +76,17 @@ void	*thread_philo(void *input)
 	t_phi	*p;
 
 	p = (t_phi *)input;
+	p->t_ate = dinner_time(p->e);
+	if (p->e->n_phi == 1)
+	{
+		printf("0 Philosopher 1 has taken left fork.\n");
+		usleep(p->e->t_die * 1000);
+		return (NULL);
+	}
 	pthread_mutex_lock(&p->e->m_print);
 	pthread_mutex_unlock(&p->e->m_print);
-	pthread_mutex_lock(&p->m_eat);
-	p->t_ate = dinner_time(p->e);
-	pthread_mutex_unlock(&p->m_eat);
 	if (p->id % 2)
-		ft_better_sleep(p->e->t_eat);
+		ft_better_sleep(1);
 	while (!end(p))
 	{
 		if (!eat(p))

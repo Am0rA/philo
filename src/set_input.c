@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   set_input.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: itopchu <itopchu@student.codam.nl>           +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/05/17 18:52:40 by itopchu       #+#    #+#                 */
+/*   Updated: 2023/05/17 18:52:40 by itopchu       ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 static long	ft_signed(char *str)
@@ -39,7 +51,7 @@ int	set_input(t_env *e, int ac, char **av)
 	e->n_meal = 0;
 	if (ac == 6)
 	{
-		e->n_meal = ft_signed(av[5]);;
+		e->n_meal = ft_signed(av[5]);
 		if (!e->n_meal)
 			return (printf("Use 0 < n_meal <= 2147483647\n"));
 	}

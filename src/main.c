@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   main.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: itopchu <itopchu@student.codam.nl>           +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/05/17 18:56:30 by itopchu       #+#    #+#                 */
+/*   Updated: 2023/05/17 18:56:30 by itopchu       ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 static void	join_threads(t_env *e)
@@ -34,8 +46,25 @@ static void	clean_table(t_env *e)
 			free(tmp);
 		}
 		pthread_mutex_destroy(&(e->phi[i].m_l));
+		pthread_mutex_destroy(&(e->phi[i].m_eat));
 	}
 	free(e->phi);
+}
+
+static void	check_cond(t_env *e)
+{
+	int	i;
+
+	while (1)
+	{
+		i = 0;
+		while (i < e->n_phi)
+		{
+			if (check_starvation(&(e->phi[i])))
+				return ;
+			i++;
+		}
+	}
 }
 
 int	main(int ac, char **av)
@@ -46,12 +75,6 @@ int	main(int ac, char **av)
 		return (printf("Input must be 4 or 5 intigers.\n"));
 	if (set_input(&e, ac, av))
 		return (printf("set_input failed.\n"));
-	if (e.n_phi == 1)
-	{
-		printf("1 Philosopher 1 has taken left fork.\n");
-		printf("%d Philosopher 1 died.\n", e.t_die);
-		return (0);
-	}
 	if (init_table(&e))
 		return (printf("init_table failed.\n"));
 	if (start_dinner(&e))
@@ -59,6 +82,7 @@ int	main(int ac, char **av)
 		clean_table(&e);
 		return (printf("start_dinner failed.\n"));
 	}
+	check_cond(&e);
 	join_threads(&e);
 	clean_table(&e);
 	return (0);

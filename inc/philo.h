@@ -1,5 +1,17 @@
-#ifndef H_PHILO
-# define H_PHILO
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   philo.h                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: itopchu <itopchu@student.codam.nl>           +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/05/17 18:55:59 by itopchu       #+#    #+#                 */
+/*   Updated: 2023/05/17 18:55:59 by itopchu       ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef PHILO_H
+# define PHILO_H
 
 // Threads
 # include <pthread.h>
@@ -37,7 +49,7 @@ typedef struct s_env
 	int				n_meal;
 }	t_env;
 
-typedef struct	s_phi
+typedef struct s_phi
 {
 	int				id;
 	int				end;
@@ -47,8 +59,8 @@ typedef struct	s_phi
 	t_list			*l;
 	pthread_t		philo;
 	pthread_t		printer;
-	pthread_mutex_t	m_l;
 	pthread_mutex_t	m_eat;
+	pthread_mutex_t	m_l;
 }	t_phi;
 
 //init_table.c
@@ -58,7 +70,7 @@ int		init_table(t_env *e);
 int		main(int ac, char **av);
 
 //philo.c
-void	check_starvation(t_phi *p);
+int		check_starvation(t_phi *p);
 void	*thread_philo(void *input);
 
 //print.c
