@@ -17,11 +17,9 @@ static void	join_threads(t_env *e)
 	int	i;
 
 	i = -1;
+	pthread_join(e->printer, NULL);
 	while (++i < e->n_phi)
-	{
-		pthread_join(e->phi[i].printer, NULL);
 		pthread_join(e->phi[i].philo, NULL);
-	}
 }
 
 static void	clean_table(t_env *e)

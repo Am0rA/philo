@@ -61,13 +61,16 @@ static int	init_philo(t_env *e)
 		e->phi[i].c_meal = 0;
 		e->phi[i].l = NULL;
 		if (init_philo_mutexes(e, &e->phi[i], i))
-			return (printf("init_philo_mutexes on %d failed.\n", i));
+		{
+			printf("init_philo_mutexes failed on %d\n", i);
+			return (0);
+		}
 		i++;
 	}
-	return (0);
+	return (1);
 }
 
-static int	init_mutexes(t_env *e)
+static int	init_env_mutexes(t_env *e)
 {
 	int	i;
 
@@ -82,10 +85,10 @@ static int	init_mutexes(t_env *e)
 			pthread_mutex_destroy(&e->m_print);
 			while (--i >= 0)
 				pthread_mutex_destroy(&e->fork[i]);
-			return (1);
+			return (0);
 		}
 	}
-	return (0);
+	return (1);
 }
 
 int	init_table(t_env *e)
@@ -98,9 +101,9 @@ int	init_table(t_env *e)
 	e->fork = malloc(sizeof(pthread_mutex_t) * e->n_phi);
 	if (!(e->fork))
 		return (free(e->phi), printf("malloc e->fork failed.\n"));
-	if (init_mutexes(e))
-		return (free(e->fork), free(e->phi), printf("init_mutexes failed.\n"));
-	if (init_philo(e))
+	if (!init_env_mutexes(e))
+		return (free(e->fork), free(e->phi), printf("init_env_mutexes failed.\n"));
+	if (!init_philo(e))
 		return (free(e->fork), free(e->phi), printf("init_philo failed.\n"));
 	return (0);
 }

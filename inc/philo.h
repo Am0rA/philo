@@ -42,6 +42,7 @@ typedef struct s_env
 	struct s_phi	*phi;
 	pthread_mutex_t	*fork;
 	pthread_mutex_t	m_print;
+	pthread_t		printer;
 	int				t_die;
 	int				t_eat;
 	int				t_sleep;
@@ -58,7 +59,6 @@ typedef struct s_phi
 	t_env			*e;
 	t_list			*l;
 	pthread_t		philo;
-	pthread_t		printer;
 	pthread_mutex_t	m_eat;
 	pthread_mutex_t	m_l;
 }	t_phi;
@@ -72,10 +72,14 @@ int		main(int ac, char **av);
 //philo.c
 int		check_starvation(t_phi *p);
 void	*thread_philo(void *input);
+int		count_meal(t_phi *p, t_list *l);
+
 
 //print.c
 int		add_cond(long ms, t_phi *p, char s[20]);
-void	*thread_print(void *input);
+
+//printer.c
+void	*thread_printer(void *input);
 
 //set_input.c
 int		set_input(t_env *e, int ac, char **av);

@@ -14,6 +14,7 @@ SRC 	=	src/init_table.c \
 			src/main.c \
 			src/philo.c \
 			src/print.c \
+			src/printer.c \
 			src/set_input.c \
 			src/start_dinner.c \
 			src/time.c

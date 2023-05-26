@@ -32,8 +32,7 @@ static int	start_philo(t_env *e)
 		printf("Failed on %d.\n", i);
 		while (i >= 0)
 			pthread_join(e->phi[i--].philo, NULL);
-		while (++i < e->n_phi)
-			pthread_join(e->phi[i].printer, NULL);
+		pthread_join(e->printer, NULL);
 		return (1);
 	}
 	return (0);
@@ -41,24 +40,10 @@ static int	start_philo(t_env *e)
 
 static int	start_printer(t_env *e)
 {
-	int	i;
-
-	i = -1;
-	while (++i < e->n_phi)
+	if (pthread_create(&e->printer, NULL, thread_printer, e))
 	{
-		if (pthread_create(&(e->phi[i].printer), NULL, \
-			thread_print, &(e->phi[i])))
-		{
-			e->end = 1;
-			pthread_mutex_unlock(&e->m_print);
-			break ;
-		}
-	}
-	if (i < e->n_phi)
-	{
-		printf("Failed on %d.\n", i);
-		while (i >= 0)
-			pthread_join(e->phi[i--].printer, NULL);
+		e->end = 1;
+		pthread_mutex_unlock(&e->m_print);
 		return (1);
 	}
 	return (0);

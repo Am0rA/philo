@@ -17,14 +17,14 @@ int	check_starvation(t_phi *p)
 	long	dinner;
 	int		status;
 
+	status = 0;
 	pthread_mutex_lock(&p->m_eat);
 	dinner = dinner_time(p->e);
-	status = 0;
 	if (dinner - p->t_ate >= p->e->t_die)
 	{
 		status = 1;
 		if (!add_cond(dinner, p, "died"))
-			printf ("Malloc problem.\n");
+			printf("Malloc problem.\n");
 	}
 	pthread_mutex_unlock(&p->m_eat);
 	return (status);
@@ -50,7 +50,9 @@ static int	eat(t_phi *p)
 	pthread_mutex_lock(&p->e->fork[p->id]);
 	if (!add_cond(dinner_time(p->e), p, "has taken a fork"))
 		return (unlock_mutexes(p, 2, vice));
+	pthread_mutex_lock(&p->m_eat);
 	p->t_ate = dinner_time(p->e);
+	pthread_mutex_unlock(&p->m_eat);
 	if (!add_cond(p->t_ate, p, "is eating"))
 		return (unlock_mutexes(p, 2, vice));
 	ft_better_sleep(p->e->t_eat);
